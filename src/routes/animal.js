@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router(); //manejador de rutas de express
 const animalSchema = require("../models/animalModel");
+const verifyToken = require('./validate_token');
 //Nuevo animal
 router.post("/animals", (req, res) => {
     const animal = animalSchema(req.body);
@@ -11,8 +12,8 @@ router.post("/animals", (req, res) => {
 });
 
 
-router.get("/animals", (req, res) => {
-    animalSchema.find()
+router.get("/animals", verifyToken, (req, res) => {
+    animalSchema.find({edad: {$eq :2}})
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
 });
